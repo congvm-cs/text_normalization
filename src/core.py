@@ -1,7 +1,6 @@
 #%%
-from constant import *
+from src.constant import *
 import subprocess
-#import cmudict
 import numpy as np
 import argparse
 
@@ -21,13 +20,14 @@ def remove_spec_punc(word):
 
 
 def remove_single_word(ipa_list):
+    viet_vowel_alpha.extend(kept_single_char) # open set
     ret_ = []
     if len(ipa_list) < 2:
         return ipa_list
     else:
         ret_.append(ipa_list[0])
         for i in range(1, len(ipa_list)):
-            if len(ipa_list[i]) > 1 or i in viet_vowel_alpha:
+            if (len(ipa_list[i]) > 1) or (ipa_list[i] in viet_vowel_alpha):
                 ret_.append(ipa_list[i])
     return ret_
 
@@ -58,8 +58,19 @@ def postprocessing(ipa_list):
                 ret_.append(i)
     return ret_
 
-
 def remove_invalid_tail(viet_words):
+    viet_consonant_apha.extend(viet_compound_alpha)
+
+    if len(viet_words) < 2:
+        return [tail_map_dict[w] if w in tail_map_dict else w for w in viet_words]
+    else:
+        last_word = viet_words[-1]
+        if last_word in viet_consonant_apha:
+            return viet_words[:-1]
+        else:
+            return viet_words
+
+def mapping_single_char(viet_words):
     ret_= [tail_map_dict[w] if w in tail_map_dict else w for w in viet_words]
     return ret_
 
@@ -168,11 +179,11 @@ def vowel_count(word):
 
 def double_consonant(ipa_list):
     ipa_list.append('_')
-    viet_consonant_apha.extend(viet_compound_alpha)
+    viet_consonant_apha_with_exception.extend(viet_compound_alpha)
     ret_ = []
     i = 0
     while i < len(ipa_list)-1:
-        if ipa_list[i] not in viet_consonant_apha and ipa_list[i+1] in viet_consonant_apha:
+        if ipa_list[i] not in viet_consonant_apha_with_exception and ipa_list[i+1] in viet_consonant_apha_with_exception:
             ret_.append(ipa_list[i])
             ret_.append(ipa_list[i+1])
             i+=1
@@ -276,11 +287,13 @@ def add_diacritic(viet_words):
 #%%
 def transcribe(sentence, is_enable_espeak,  debug=False):
     if is_enable_espeak:
-        get_ipa_from_dictionary = get_ipa
-    
-    function_list = [get_ipa_from_dictionary, remove_spec_punc, split_special_ipa, 
+        ipa_getter = get_ipa
+    else:
+	    ipa_getter = get_ipa_from_dictionary
+	    
+    function_list = [ipa_getter, remove_spec_punc, split_special_ipa, 
                     double_consonant, merge_ipa, mapping, split_consonant_vowel_combination,
-                    remove_single_word, combine_valid_viet, remove_invalid_tail, 
+                    remove_single_word, combine_valid_viet, remove_invalid_tail, mapping_single_char, 
                     remove_viet_single_word, add_diacritic]
 
     if len(sentence) == 0:
@@ -291,16 +304,15 @@ def transcribe(sentence, is_enable_espeak,  debug=False):
         for word in words:
             for func in function_list:
                 word = func(word)
-                if debug: print(word)
-            ret += " ".join([w for w in word]) + " "
-    return ret
+                if debug: print(func.__name__,"----->", word, sep="\t")
+            
+            curr = ""
+            prev = ""    
+            for i in range(len(word)):
+                curr = word[i]
+                if curr != prev:
+                    ret += curr + " "
+                prev = curr
+    return ret 
 
-#%%
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--sentence', type=str, required=True)
-    parser.add_argument('-d', '--debug', type=int, default=0, help="debugger - 0: False; 1: True")
-    parser.add_argument('-e', '--is_enable_espeak', type=int, default=1)
-    args = parser.parse_args()
-    print(transcribe(**vars(args)))
 

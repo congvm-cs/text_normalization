@@ -16,9 +16,27 @@ tail_map_dict = {
     "t": "tờ",
     "ol": "o",
     "ov": "op",
-    "ph": "phờ"
+    "ph": "phờ",
+    "v": "vờ"
 }
 
+
+viet_consonant_apha_with_exception = [
+ 'b',
+ 'c',
+ 'k',
+ 'l',
+ 'n',
+ 'm',
+ 'p',
+ 'q',
+ 's',
+ 't',
+ 'f',
+ 'dʒ',
+ 'ʃ',
+ 'tʃ',
+ '_']
 
 
 viet_consonant_apha = [
@@ -48,6 +66,8 @@ viet_consonant_apha = [
 viet_vowel_alpha = ['a','ă', 'â', 'e', 'ê', 'o', 'ô', 'ơ', 'u', 'ư', 'i', 'y']
 
 viet_compound_alpha = ['gi', 'ch', 'gh', 'ph', 'tr', 'th', 'qu', 'kh', 'gi', 'ng', 'nɡ', '_', 'nɡ', 'ng', 'tɹ', 'tr']
+
+kept_single_char = ['v']
 
 first_exception_word = {
     "juː": "du",
@@ -286,7 +306,8 @@ map_dict = {
     "ol": "o",
     "ɪð": "it",
     "ɪs": "it",
-    # "ɪʃ": "it",
+    "ʌb": "âp",
+    "ɪʃ": "it",
     # "ɪ": "i"
     "ɜːd": "ơt",
     "ov": "op",
