@@ -1,4 +1,11 @@
+def get_num():
+    return 1
+
 removed_pun_ipa_list = [712, 716]
+
+special_ipa_char = {
+    "əl" : ['əl', 'l']
+}
 
 tail_map_dict = {
     "juː": "iu",
@@ -40,7 +47,7 @@ viet_consonant_apha = [
 
 viet_vowel_alpha = ['a','ă', 'â', 'e', 'ê', 'o', 'ô', 'ơ', 'u', 'ư', 'i', 'y']
 
-viet_compound_alpha = ['ch', 'gh', 'ph', 'tr', 'th', 'qu', 'kh', 'gi', 'ng', 'nɡ', '_', 'nɡ', 'ng', 'tɹ', 'tr']
+viet_compound_alpha = ['gi', 'ch', 'gh', 'ph', 'tr', 'th', 'qu', 'kh', 'gi', 'ng', 'nɡ', '_', 'nɡ', 'ng', 'tɹ', 'tr']
 
 first_exception_word = {
     "juː": "du",
@@ -217,7 +224,7 @@ map_dict = {
     "ɡ" : "g",
     "a": "a",
     "iə": "ơ",
-    "ɐ": "a",
+    "ɐ": "â",
     "ə": "ơ",
     "əʊ": "âu",
     "ʌ":    "â",
@@ -233,14 +240,6 @@ map_dict = {
     "ɔ":    "ô",
     "ʊ":    "u",
     "u":    "u",
-    "aɪ":   "ai",
-    "aʊ":   "ao",
-    "eɪ":   "ây",
-    "oʊ":   "âu", # go >< home
-    "ɔɪ":   "oi",
-    "eə":   "e",
-    "ɪə":   "ia",
-    "ʊə":   "ua",
     "b":    "b",
     "d":    "đ",
     "f":    "ph",
@@ -273,7 +272,7 @@ map_dict = {
     "ɒs" : "ot",
     "ɪl": "iu", 
     "ɪv": "i",
-    "əl": "ơ",
+    "əl": "ô",
     "ɛ": "e",
     "ɹ" : "r",
     "ɜː": "ơ",
@@ -282,8 +281,8 @@ map_dict = {
     "ɔː": "o",
     "juː": "iu",
     "t" : "t",
-    "ʌl" : "âu",
-    "əs": "ec",
+    "ʌl": "âu",
+    "əs": "et",
     "ol": "o",
     "ɪð": "it",
     "ɪs": "it",
@@ -296,8 +295,20 @@ map_dict = {
     "ʌs": "ât",
     "kh": "kh",
     "ag": "a",
-    "ʌɡ" : "âc",
-    "ʌz": "ơt"
+    "ʌɡ": "âc",
+    "ʌz": "ơt",
+    "aɪ": "ai",
+    "aʊ": "ao",
+    "eɪ": "ây",
+    "oʊ": "âu", # go >< home
+    "ɔɪ": "oi",
+    "eə": "e",
+    "ɪə": "ia",
+    "ʊə": "ua",
+    'ɛl': "eo",
+    "ɜːb": "ơp",
+    "ɛs" : "et",
+    "əʊn" : "ôn"
 }
 
 phoneme_dict = {
@@ -371,4 +382,37 @@ phoneme_dict = {
  'y': "",
  'z': "",
  'zh': ""
+}
+
+viet_valid_with_diacritic = {
+    'ac': 'ác',
+    'at': 'át',
+    'ap': 'áp',
+    'âc': 'ấc',
+    'ât': 'ất',
+    'âp': 'ấp',
+    'ăc': 'ắc',
+    'ăt': 'ắt',
+    'ăp': 'ắp',
+    'ot': 'ót',
+    'oc': 'óc',
+    'ôc': 'ốc',
+    'ôt' : 'ốt',
+    'ơt': 'ớt',
+    'ơp': 'ớp',
+    'ic': 'íc',
+    'it': 'ít',
+    'ip': 'íp',
+    'et': 'ét',
+    'ec': 'éc',
+    'ep': 'ép',
+    'êc': 'ếc',
+    'êt': 'ết',
+    'ut': 'út',
+    'uc': 'úc',
+    'up': 'úp',
+    'ưc': 'ức',
+    'ưt': 'ứt',
+    'yt': 'ýt',
+    
 }
