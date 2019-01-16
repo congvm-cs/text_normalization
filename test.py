@@ -274,92 +274,33 @@ def add_diacritic(viet_words):
 
 
 #%%
-def translate_with_printer(words):
-    words  = words.strip().split()
-    ret = ""
-    for word in words:
-        ipa = get_ipa_from_dictionary(word); print(ipa)
-        ipa = remove_spec_punc(ipa); print(ipa)
-        ipa = split_special_ipa(ipa); print(ipa)
-        ipa = double_consonant(ipa); print(ipa)
-        ipa = merge_ipa(ipa); print(ipa)
-        viet_words = mapping(ipa); print(viet_words)
-        viet_words = split_consonant_vowel_combination(viet_words); print(viet_words)
-        viet_words = remove_single_word(viet_words); print(viet_words)
-        viet_words = combine_valid_viet(viet_words); print(viet_words)
-        viet_words = remove_invalid_tail(viet_words); print(viet_words)
-        viet_words = remove_viet_single_word(viet_words); print(viet_words)
-        viet_words = add_diacritic(viet_words); print(viet_words)
-        ret += " ".join([word for word in viet_words]) + " "
-    return ret
+def transcribe(sentence, is_enable_espeak,  debug=False):
+    if is_enable_espeak:
+        get_ipa_from_dictionary = get_ipa
+    
+    function_list = [get_ipa_from_dictionary, remove_spec_punc, split_special_ipa, 
+                    double_consonant, merge_ipa, mapping, split_consonant_vowel_combination,
+                    remove_single_word, combine_valid_viet, remove_invalid_tail, 
+                    remove_viet_single_word, add_diacritic]
 
-def translate(words):
-    words  = words.strip().split()
-    ret = ""
-    for word in words:
-        word = word.lower()
-        ipa = get_ipa_from_dictionary(word)
-        ipa = remove_spec_punc(ipa)
-        ipa = split_special_ipa(ipa)
-        ipa = double_consonant(ipa)
-        ipa = merge_ipa(ipa)
-        viet_words = mapping(ipa)
-        viet_words = split_consonant_vowel_combination(viet_words)
-        viet_words = remove_single_word(viet_words)
-        viet_words = combine_valid_viet(viet_words)
-        viet_words = remove_invalid_tail(viet_words)
-        viet_words = remove_viet_single_word(viet_words)
-        viet_words = add_diacritic(viet_words)
-        ret += " ".join([word for word in viet_words]) + " "
+    if len(sentence) == 0:
+        return sentence
+    else:
+        words  = sentence.strip().split()
+        ret = ""
+        for word in words:
+            for func in function_list:
+                word = func(word)
+                if debug: print(word)
+            ret += " ".join([w for w in word]) + " "
     return ret
 
 #%%
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--s', type=str, required=True)
+    parser.add_argument('-s', '--sentence', type=str, required=True)
+    parser.add_argument('-d', '--debug', type=int, default=0, help="debugger - 0: False; 1: True")
+    parser.add_argument('-e', '--is_enable_espeak', type=int, default=1)
     args = parser.parse_args()
+    print(transcribe(**vars(args)))
 
-    print(translate_with_printer(args.s))
-
-
-
-
-#===================================================================##
-
-# #%%
-# import pandas as pd
-
-# #%%
-# data = pd.read_csv('./britfone.main.3.0.1.csv', names=['word', 'ipa'])
-
-# #%%
-# # for i in data.iterrow():
-#     # preprocess()
-# list_data = []
-# for i in data.iterrows():
-#     list_data.append(i)
-
-# #%%
-# next(i)[1]['word']
-
-# #%%
-# dict_1 = {}
-# prev = ""
-# current = ""
-# for i in list_data[::-1]:
-#     current = preprocess(str(i[1]['word']))
-#     if current != prev:
-#         dict_1[current] = str(i[1]['ipa']).strip().split()
-
-#     prev = current
-# #%%
-# dict_1
-
-# #%%
-# list_data[0][1]['word']
-
-# #%%
-# import numpy as np
-# np.save('ipa_pronounce_dict.npy', dict_1)
-
-# #%%
